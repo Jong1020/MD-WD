@@ -1,0 +1,5 @@
+{
+  "name": "❤Markdown转Word神器",
+  "description": "一个高效的在线工具，用于将Markdown文档转换为保留格式的Word(.docx)文件。支持实时预览、表格、代码高亮及数学公式转换。",
+  "requestFramePermissions": []
+}
