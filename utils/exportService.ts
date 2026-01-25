@@ -30,9 +30,10 @@ export const generateDocx = async (
         };
 
         if (gongwenConfig.redHeaderText) {
+            // Using &nbsp; ensures the div has content so borders render in Word
             headerHtml = `
               <div class="red-header">${gongwenConfig.redHeaderText}</div>
-              <div class="red-line"></div>
+              <div class="red-line">&nbsp;</div>
             `;
         }
     } else {

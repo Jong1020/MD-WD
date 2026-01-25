@@ -129,7 +129,9 @@ export const getOfficialStyles = (config: GongwenConfig, scope?: string) => {
     border-top: 3px solid #FF0000;
     margin-bottom: 40pt;
     width: 100%;
-    height: 0;
+    line-height: 1pt;
+    font-size: 1pt;
+    color: transparent; /* Hide the nbsp content */
   }
   
   ${s}h1 {

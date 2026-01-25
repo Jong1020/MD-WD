@@ -74,9 +74,9 @@ const Preview: React.FC<PreviewProps> = ({ content, styleMode, gongwenConfig }) 
 
               {/* Render Red Header if in Official Mode and text is present */}
               {isOfficial && gongwenConfig.redHeaderText && (
-                 <div className="mb-8">
+                 <div>
                      <div className="red-header">{gongwenConfig.redHeaderText}</div>
-                     <div className="red-line"></div>
+                     <div className="red-line">&nbsp;</div>
                  </div>
               )}
 
