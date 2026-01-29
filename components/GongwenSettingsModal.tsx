@@ -76,7 +76,7 @@ const GongwenSettingsModal: React.FC<GongwenSettingsModalProps> = ({ isOpen, onC
                   type="text" 
                   value={localConfig.redHeaderText || ''}
                   onChange={(e) => handleChange('redHeaderText', e.target.value)}
-                  placeholder="例如：嵩 明 县 教 育 体 育 局"
+                  placeholder="请输入红头机构名称"
                   className="w-full text-sm rounded-md border-red-200 shadow-sm focus:border-red-500 focus:ring-red-500 text-red-800 placeholder-red-300"
                 />
             </div>
@@ -92,9 +92,9 @@ const GongwenSettingsModal: React.FC<GongwenSettingsModalProps> = ({ isOpen, onC
                   onChange={(e) => handleChange('headingFont', e.target.value)}
                   className="w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 >
-                  <option value="FZXiaoBiaoSong-B05S">方正小标宋</option>
-                  <option value="SimHei">黑体</option>
-                  <option value="SimSun">宋体</option>
+                  <option value="方正小标宋简体">方正小标宋简体</option>
+                  <option value="黑体">黑体</option>
+                  <option value="宋体">宋体</option>
                 </select>
               </div>
               <div>
@@ -104,9 +104,9 @@ const GongwenSettingsModal: React.FC<GongwenSettingsModalProps> = ({ isOpen, onC
                   onChange={(e) => handleChange('bodyFont', e.target.value)}
                   className="w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 >
-                  <option value="FangSong_GB2312">仿宋_GB2312</option>
+                  <option value="仿宋_GB2312">仿宋_GB2312</option>
                   <option value="FangSong">普通仿宋</option>
-                  <option value="KaiTi">楷体</option>
+                  <option value="楷体_GB2312">楷体_GB2312</option>
                   <option value="SimSun">宋体</option>
                 </select>
               </div>
@@ -142,12 +142,12 @@ const GongwenSettingsModal: React.FC<GongwenSettingsModalProps> = ({ isOpen, onC
             <h3 className="text-sm font-bold text-gray-800 border-b pb-1 mt-6">版面设置 (行距与边距)</h3>
             <div className="grid grid-cols-2 gap-4">
                <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">行高 (如 29pt)</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">行高 (如 28pt)</label>
                 <input 
                   type="text" 
                   value={localConfig.lineHeight}
                   onChange={(e) => handleChange('lineHeight', e.target.value)}
-                  placeholder="29pt"
+                  placeholder="28pt"
                   className="w-full text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
               </div>

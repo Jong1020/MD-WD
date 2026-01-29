@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Download, Trash2, Upload, FileType, Settings, Layout, Edit3, Eye } from 'lucide-react';
 import { ViewMode, StyleMode } from '../types';
@@ -108,10 +109,17 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
         <div className="h-6 w-px bg-gray-200 mx-1 hidden sm:block"></div>
 
-        <input type="file" ref={fileInputRef} accept=".md,.txt" className="hidden" onChange={handleFileChange} />
+        <input type="file" ref={fileInputRef} accept=".md,.txt,.docx" className="hidden" onChange={handleFileChange} />
         
-        <button onClick={() => fileInputRef.current?.click()} className="icon-btn text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-colors" title="导入">
+        <button 
+          onClick={() => fileInputRef.current?.click()} 
+          className="group relative icon-btn text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-colors" 
+        >
           <Upload className="w-4.5 h-4.5" />
+          {/* Tooltip */}
+          <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-max px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-md">
+            支持 .md, .txt, .docx
+          </span>
         </button>
 
         <button onClick={onClear} className="icon-btn text-gray-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors" title="清空">

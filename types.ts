@@ -37,11 +37,11 @@ export const GONGWEN_PRESETS: Record<string, GongwenConfig> = {
   default: {
     preset: 'default',
     redHeaderText: '',
-    headingFont: 'FZXiaoBiaoSong-B05S', // 方正小标宋简体
-    bodyFont: 'FangSong_GB2312',        // 仿宋_GB2312
+    headingFont: '方正小标宋简体', // Updated to Chinese name for reliability
+    bodyFont: '仿宋_GB2312',        // Updated to Chinese name for reliability
     headingSize: '22pt', // 2号
     bodySize: '16pt',    // 3号
-    lineHeight: '29pt',  // Approx for 22 lines per page (22.5cm text height / 22 lines)
+    lineHeight: '28pt',  // Rule 9: Fixed 28pt
     indent: '2em',
     marginTop: 2098,     // 3.7cm
     marginBottom: 1985,  // 3.5cm
@@ -51,11 +51,11 @@ export const GONGWEN_PRESETS: Record<string, GongwenConfig> = {
   red_header: {
     preset: 'red_header',
     redHeaderText: '公文自动排版系统', // Default placeholder
-    headingFont: 'FZXiaoBiaoSong-B05S',
-    bodyFont: 'FangSong_GB2312',
+    headingFont: '方正小标宋简体',
+    bodyFont: '仿宋_GB2312',
     headingSize: '22pt',
     bodySize: '16pt',
-    lineHeight: '29pt',
+    lineHeight: '28pt', // Rule 9: Fixed 28pt
     indent: '2em',
     marginTop: 2098,
     marginBottom: 1985,
@@ -65,8 +65,8 @@ export const GONGWEN_PRESETS: Record<string, GongwenConfig> = {
   minutes: {
     preset: 'minutes',
     redHeaderText: '',
-    headingFont: 'SimHei',
-    bodyFont: 'KaiTi',
+    headingFont: '黑体',
+    bodyFont: '楷体_GB2312',
     headingSize: '18pt',   // 2号
     bodySize: '14pt',      // 4号
     lineHeight: '1.5',

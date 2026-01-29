@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import Toolbar from './components/Toolbar';
 import Editor from './components/Editor';
@@ -5,6 +6,8 @@ import Preview from './components/Preview';
 import GongwenSettingsModal from './components/GongwenSettingsModal';
 import { ViewMode, StyleMode, DEFAULT_MARKDOWN, GongwenConfig, GONGWEN_PRESETS } from './types';
 import { generateDocx } from './utils/exportService';
+import * as mammoth from 'mammoth';
+import TurndownService from 'turndown';
 
 const App: React.FC = () => {
   const [markdown, setMarkdown] = useState<string>(DEFAULT_MARKDOWN);
@@ -53,7 +56,104 @@ const App: React.FC = () => {
     }
   };
 
-  const handleFileUpload = (file: File) => {
+  // Helper: Apply heuristics to format Markdown for Gongwen
+  const autoFormatGongwen = (md: string): string => {
+    const lines = md.split('\n');
+    const processed = [];
+    let foundTitle = false;
+  
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i]; 
+      const trimmed = line.trim();
+      
+      if (!trimmed) {
+        processed.push(line);
+        continue;
+      }
+  
+      // 1. Title Detection (First non-empty line)
+      if (!foundTitle) {
+         if (trimmed.startsWith('#')) {
+           foundTitle = true; 
+         } else {
+           // Heuristic: If line is short and not a property, assume Title
+           // Exclude lines ending with punctuation usually? But titles can have them.
+           // Limit length to avoid capturing long paragraphs.
+           if (trimmed.length < 60) {
+             line = `# ${trimmed}`;
+             foundTitle = true;
+           }
+         }
+         processed.push(line);
+         continue;
+      }
+  
+      // 2. Section Detection
+      // Skip if already header or part of a code block/table (simple check)
+      if (trimmed.startsWith('#') || trimmed.startsWith('|') || trimmed.startsWith('```')) {
+        processed.push(line);
+        continue;
+      }
+  
+      // Level 1: "一、" or "二、"
+      if (/^[一二三四五六七八九十]+、/.test(trimmed)) {
+        line = `## ${trimmed}`;
+      }
+      // Level 2: "（一）" or "(一)"
+      else if (/^[(（][一二三四五六七八九十]+[)）]/.test(trimmed)) {
+        line = `### ${trimmed}`;
+      }
+      // Level 3: "1、" or "2、" (Not 1. which is list)
+      else if (/^[0-9]+、/.test(trimmed)) {
+         line = `#### ${trimmed}`;
+      }
+  
+      processed.push(line);
+    }
+    return processed.join('\n');
+  };
+
+  const handleFileUpload = async (file: File) => {
+    // Handle .docx files
+    if (file.name.endsWith('.docx')) {
+       const reader = new FileReader();
+       reader.onload = async (e) => {
+         const arrayBuffer = e.target?.result as ArrayBuffer;
+         if (!arrayBuffer) return;
+         try {
+           // Map Standard Word Styles to Semantics
+           const options = {
+              styleMap: [
+                "p[style-name='Title'] => h1:fresh",
+                "p[style-name='Heading 1'] => h2:fresh", 
+                "p[style-name='Heading 2'] => h3:fresh", 
+                "p[style-name='Heading 3'] => h4:fresh", 
+              ]
+           };
+           
+           // @ts-ignore
+           const result = await mammoth.convertToHtml({ arrayBuffer, ...options });
+           const turndownService = new TurndownService({
+             headingStyle: 'atx',
+             codeBlockStyle: 'fenced'
+           });
+           
+           let markdownRaw = turndownService.turndown(result.value);
+           
+           // Apply Heuristics
+           const markdownFormatted = autoFormatGongwen(markdownRaw);
+           
+           setMarkdown(markdownFormatted);
+         } catch (error) {
+           console.error("Docx parsing failed:", error);
+           alert('Word文档解析失败，请确保文档未加密且格式正确。');
+         }
+       };
+       reader.readAsArrayBuffer(file);
+       return;
+    }
+
+    // Handle plain text / markdown
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
@@ -77,7 +177,7 @@ const App: React.FC = () => {
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
-      if (file.name.endsWith('.md') || file.name.endsWith('.txt')) {
+      if (file.name.endsWith('.md') || file.name.endsWith('.txt') || file.name.endsWith('.docx')) {
         handleFileUpload(file);
       }
     }
@@ -108,6 +208,7 @@ const App: React.FC = () => {
           <div className="absolute inset-0 bg-indigo-500/10 backdrop-blur-[2px] z-50 flex items-center justify-center rounded-3xl border-2 border-indigo-400 border-dashed m-4">
              <div className="bg-white px-8 py-6 rounded-2xl shadow-2xl text-center">
                 <p className="text-lg font-bold text-indigo-600">释放以导入文件</p>
+                <p className="text-sm text-gray-400 mt-2">支持 .md, .txt, .docx</p>
              </div>
           </div>
         )}
